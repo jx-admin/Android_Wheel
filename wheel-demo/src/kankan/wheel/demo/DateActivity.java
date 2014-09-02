@@ -27,10 +27,10 @@ public class DateActivity extends Activity {
         final WheelView month = (WheelView) findViewById(R.id.month);
         month.setShadow(false);
         month.setCenterDrawable(R.drawable.time_selecor_center);
-        month.setBackgroundResource(R.drawable.custom_wheel_bg);
         month.setTextColor(0xffff0000, 0xff000000);
         month.setCyclic(true);
         final WheelView year = (WheelView) findViewById(R.id.year);
+        year.setBackgroundResource(R.drawable.custom_wheel_bg);
         final WheelView day = (WheelView) findViewById(R.id.day);
         
         OnWheelChangedListener listener = new OnWheelChangedListener() {

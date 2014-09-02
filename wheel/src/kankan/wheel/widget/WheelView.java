@@ -27,11 +27,11 @@ import kankan.wheel.widget.adapters.WheelViewAdapter;
 import android.content.Context;
 import android.database.DataSetObserver;
 import android.graphics.Canvas;
+import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.GradientDrawable.Orientation;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
@@ -498,7 +498,7 @@ public class WheelView extends View {
 	 * Returns height of wheel item
 	 * @return the item height
 	 */
-	private int getItemHeight() {
+	public int getItemHeight() {
 		if (itemHeight != 0) {
 			return itemHeight;
 		}
@@ -581,9 +581,10 @@ public class WheelView extends View {
      */
     private void layout(int width, int height) {
 		int itemsWidth = width - 2 * PADDING;
-		
+		clipR.set(getPaddingLeft(), getPaddingTop(), getWidth()-getPaddingRight(), getHeight()-getPaddingBottom());
 		itemsLayout.layout(0, 0, itemsWidth, height);
     }
+    Rect clipR=new Rect();
 
 	@Override
 	protected void onDraw(Canvas canvas) {
@@ -595,10 +596,8 @@ public class WheelView extends View {
 			//
 			if(centerTextColor!=-1){
 				oldViewItem=currentViewItem;
-				Log.d("ddd","setCurrentItem:"+(itemsLayout==null));
 				if(itemsLayout!=null){
 					int in=currentItem-firstItem;
-					Log.d("ddd","currentItem: "+in);
 					currentViewItem=itemsLayout.getChildAt(in);
 					if(currentViewItem==null){
 						currentViewItem=oldViewItem;
@@ -645,8 +644,8 @@ public class WheelView extends View {
 		canvas.save();
 		
 		int top = (currentItem - firstItem) * getItemHeight() + (getItemHeight() - getHeight()) / 2;
+		canvas.clipRect(clipR);
 		canvas.translate(PADDING, - top + scrollingOffset);
-		
 		itemsLayout.draw(canvas);
 
 		canvas.restore();
@@ -674,7 +673,7 @@ public class WheelView extends View {
 		switch (event.getAction()) {
 		    case MotionEvent.ACTION_MOVE:
 		        if (getParent() != null) {
-		            getParent().requestDisallowInterceptTouchEvent(true);
+//		            getParent().requestDisallowInterceptTouchEvent(true);
 		        }
 		        break;
 		        
